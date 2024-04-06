@@ -1,0 +1,173 @@
+swagger: "2.0"
+info:
+  description: Swagger file for people API 
+  version: "1.0.0"
+  title: Swagger for people API
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+
+basePath: "/api"
+
+# Paths supported by the server application
+paths:
+  # Base path
+  /people:
+    # All CRUD operations at that path can be specified below (like get, post, put, delete)
+    get:
+      # Which python function should this route map to
+      operationId: "people.read_all"
+      tags:
+        - "People"
+      # Describe what this operation does
+      summary: "Read entire set of people, sorted by last name"
+      description: "Read the list of people, sorted by last name"
+      # Describe the response structure
+      responses:
+        # Status code
+        200:
+          description: "Successful read people list operation"
+          # response schema
+          schema:
+            type: "array"
+            items:
+              properties:
+                person_id:
+                  type: string
+                  description: id of the person
+                fname:
+                  type: string
+                  description: first name of the person
+                lname:
+                  type: string
+                  description: last name of the person
+                timestamp:
+                  type: string
+                  description: creation/updation timestamp of the person
+    post:
+      operationId: "people.create"
+      tags:
+        - "People"
+      summary: "Create a person"
+      description: "Create a new person"
+      # If passing a body, describe the parameters that would be passed
+      parameters:
+        - name: person
+          # Where is the param passed: body, query or path params
+          in: body
+          description: Person to create
+          required: True
+          schema:
+            type: object
+            properties:
+              fname:
+                type: string
+                description: First name of person to create
+              lname:
+                type: string
+                description: Last name of person to create
+      responses:
+        201:
+          description: Successfully created person 
+          schema:
+            properties:
+              person_id:
+                type: string
+                description: id of the person
+              fname:
+                type: string
+                description: first name of the person
+              lname:
+                type: string
+                description: last name of the person
+              timestamp:
+                type: string
+                description: creation/updation timestamp of the person record
+
+  /people/{person_id}:
+    get:
+      operationId: people.read_one
+      tags:
+        - People
+      summary: Read one person 
+      description: Read one person
+      parameters:
+        - name: person_id
+          in: path
+          description: Id of the person to get
+          type: integer 
+          required: True
+      responses:
+        200:
+          description: Successfully read one person 
+          schema:
+            properties:
+              person_id:
+                type: string
+                description: id of the person
+              fname:
+                type: string
+                description: first name of the person
+              lname:
+                type: string
+                description: last name of the person
+              timestamp:
+                type: string
+                description: creation/updation timestamp of the person record
+    put:
+      operationId: people.update
+      tags:
+        - People
+      summary: Update a person 
+      description: Update a person 
+      parameters:
+        - name: person_id 
+          in: path
+          description: Id of the person to update
+          type: integer 
+          required: True
+        - name: person
+          in: body
+          schema:
+            type: object
+            properties: 
+              fname: 
+                type: string
+                description: first name of the person
+              lname:
+                type: string
+                description: last name of the person
+      responses:
+        200:
+          description: Successfully updated the person
+          schema:
+            properties:
+              person_id:
+                type: string
+                description: id of the person
+              fname:
+                type: string
+                description: first name of the person
+              lname:
+                type: string
+                description: last name of the person
+              timestamp:
+                type: string
+                description: creation/updation timestamp of the person record
+    delete:
+      operationId: people.delete
+      tags:
+        - People
+      summary: Delete a person in person list
+      description: Delete a person in the people list
+      parameters:
+        - name: person_id
+          in: path
+          type: integer
+          description: Id of the person to delete in the list
+          required: True
+      responses:
+        200:
+          description: Successfully deleted a person
+
